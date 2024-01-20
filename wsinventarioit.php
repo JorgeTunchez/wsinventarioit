@@ -11,7 +11,7 @@ include("model/wsinventarioitmodel.php");
 $data = json_decode(file_get_contents('php://input'), true);
 
 if( isset($data['id']) ){
-    $id = $data['id'];
+    $id = trim($data['id']);
     if( $id != ''){
         $arrDatos = obtenerData($id);
         echo json_encode($arrDatos, true);
