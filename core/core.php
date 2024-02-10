@@ -22,4 +22,23 @@ function executeQuery($strQuery){
     }
 }
 
+
+function wsRespuesta($httpCodigo, $codigoRes, $descripcionRes, $arrDatos = array()){
+
+    header('Content-Type: application/json');
+    if( $httpCodigo == 200){
+        header("HTTP/1.1 200 OK");
+    }else{
+        header("HTTP/1.1 500 Internal Server Error");
+    }
+    $arrJson["codigoRespuesta"] = $codigoRes;
+    $arrJson["descripcionRespuesta"] = $descripcionRes;
+    if( count($arrDatos)>0 ){
+        $arrJson["detalle"] = $arrDatos;
+    }
+    
+    $jsonSalida = json_encode($arrJson,true);
+    echo json_encode($arrJson, true);
+}
+
 ?>

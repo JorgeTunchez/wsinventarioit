@@ -11,30 +11,17 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 if( isset($data['cif']) ){
     $cif = trim($data['cif']);
-    if( $cif != ''){
+    if( $cif != '' ){
         $arrDatos = obtenerData($cif);
         if( count($arrDatos)>0 ){
-            echo json_encode($arrDatos, true);
+            wsRespuesta(200, 0, "", $arrDatos);
         }else{
-            header('Content-Type: application/json');
-            header("HTTP/1.1 500 Internal Server Error");
-            $arrJson["respuesta"] = "No se encontraron datos con el cif ingresado.";
-            $jsonSalida = json_encode($arrJson,true);
-            echo json_encode($arrJson, true);
+            wsRespuesta(500, 0, "No se encontraron datos con el cif ingresado.");
         }
-        
     }else{
-        header('Content-Type: application/json');
-        header("HTTP/1.1 500 Internal Server Error");
-        $arrJson["respuesta"] = "El campo cif se ingreso vacio.";
-        $jsonSalida = json_encode($arrJson,true);
-        echo json_encode($arrJson, true);
+        wsRespuesta(500, 0, "El campo cif se ingreso vacio.");
     }
 }else{
-    header('Content-Type: application/json');
-    header("HTTP/1.1 500 Internal Server Error");
-    $arrJson["respuesta"] = "Debe ingresar el campo cif en el json de entrada.";
-    $jsonSalida = json_encode($arrJson, true);
-    echo json_encode($arrJson, true);
+    wsRespuesta(500, 0, "Error en el json de entrada.");
 }
 ?>
