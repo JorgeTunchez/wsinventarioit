@@ -7,21 +7,28 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 date_default_timezone_set("America/Guatemala");
 
 include("model/wsinventarioitmodel.php");
-$data = json_decode(file_get_contents('php://input'), true);
+$metodo = $_SERVER['REQUEST_METHOD'];
 
-if( isset($data['cif']) ){
-    $cif = trim($data['cif']);
-    if( $cif != '' ){
-        $arrDatos = obtenerData($cif);
-        if( count($arrDatos)>0 ){
-            wsRespuesta(200, 0, "", $arrDatos);
+switch ($metodo) {
+    case 'POST':
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        if( !isset($data['cif']) || $data['cif'] == '' ){
+            wsRespuesta(500, 0, "Error en el json de entrada.");
         }else{
-            wsRespuesta(500, 0, "No se encontraron datos con el cif ingresado.");
+            $cif = $data['cif'];
+            $arrDatos = obtenerData($cif);
+            if( count($arrDatos)>0 ){
+                wsRespuesta(200, 0, "", $arrDatos);
+            }else{
+                wsRespuesta(500, 0, "No se encontraron datos con el cif ingresado.");
+            }
         }
-    }else{
-        wsRespuesta(500, 0, "El campo cif se ingreso vacio.");
-    }
-}else{
-    wsRespuesta(500, 0, "Error en el json de entrada.");
+
+        break;
+    
+    default:
+        wsRespuesta(500, 0, "Metodo Invalido.");
 }
+
 ?>
